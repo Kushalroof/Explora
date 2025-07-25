@@ -63,6 +63,16 @@ module.exports.editListing=async (req,res)=>{
   list.location = req.body.listing.location;
   list.country = req.body.listing.country;
 
+  console.log(list.country);
+
+  let response= await geocodingClient.forwardGeocode({
+  query: list.location,
+  limit: 2
+  }).send();
+  console.log(response.body.features[0].geometry)
+
+  list.geometry=response.body.features[0].geometry;
+
   if(typeof req.file !== "undefined"){
     let url=req.file.path;
     let filename=req.file.filename;
