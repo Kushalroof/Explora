@@ -1,0 +1,13 @@
+<%if(success && success.length){%>
+    <div class="alert alert-success alert-dismissible fade show py-2 px-3 small mt-3" role="alert" style="max-width: 600px; margin: auto;">
+        <%=success%>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="top: -7px; right: 10px;"></button>
+    </div>
+<%}%>
+
+<%if(error && error.length){%>
+    <div class="alert alert-danger alert-dismissible fade show py-2 px-3 small mt-3" role="alert" style="max-width: 600px; margin: auto;">
+        <%=error%>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="top: -7px; right: 10px;"></button>
+    </div>
+<%}%>
