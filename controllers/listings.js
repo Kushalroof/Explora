@@ -69,6 +69,7 @@ module.exports.editListing=async (req,res)=>{
   list.price = req.body.listing.price;
   list.location = req.body.listing.location;
   list.country = req.body.listing.country;
+  list.category=req.body.listing.category;
   let response= await geocodingClient.forwardGeocode({
   query: list.location,
   limit: 2
