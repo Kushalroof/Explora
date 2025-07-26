@@ -80,8 +80,10 @@ module.exports.editListing=async (req,res)=>{
     let url=req.file.path;
     let filename=req.file.filename;
     list.image={url,filename};
-    await list.save();
+    return await list.save();
   }
+  await list.save();
+  console.log(list);
   req.flash("success","Listing updated!");
   res.redirect(`/listings/${id}`);
 }

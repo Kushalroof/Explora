@@ -45,7 +45,7 @@
             <label for="category" class="form-label">Category</label>
             <select name="listing[category]" class="form-select" required>
             <% for (let elem of alltypes) { %>
-                <option value="<%= elem %>"><%= elem %></option>
+                <option value="<%= elem %>" <%= list.category === elem ? "selected" : "" %>><%= elem %></option>
             <% } %>
             </select>
             <div class="invalid-feedback">Please select a category</div>
