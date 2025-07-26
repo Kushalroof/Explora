@@ -4,12 +4,18 @@ const mapToken= process.env.MAP_TOKEN;
 const geocodingClient = mbxGeocoding({ accessToken: mapToken});
 
 module.exports.index= async (req,res)=>{
-    const alllistings=await Listing.find({});
-    res.render("./listings/index.ejs",{alllistings});
+  const {category} = req.query;
+  if(category){
+    alllistings = await Listing.find({ category });
+  }else{
+    alllistings=await Listing.find({});
+  }
+  res.render("./listings/index.ejs",{alllistings});
 }
 
 module.exports.renderNewForm=(req,res)=>{
-    res.render("./listings/new.ejs");
+  let alltypes=["Trending","Rooms","IconicCities","Mountains","Castle","Pools","Treehouses","Tents","Boats","Farms","Camping","Arctic","Caravan","Igloo","Domes","Trucks"];
+    res.render("./listings/new.ejs",{alltypes});
 }
 
 module.exports.showListing=async (req, res, next) => {
@@ -44,6 +50,7 @@ module.exports.addNewListing=async (req,res, next)=>{
 module.exports.renderEditForm=async (req, res) => {
   let { id } = req.params;
   const list = await Listing.findById(id);
+  let alltypes=["Trending","Rooms","IconicCities","Mountains","Castle","Pools","Treehouses","Tents","Boats","Farms","Camping","Arctic","Caravan","Igloo","Domes","Trucks"];
   if(!list){
     req.flash("error","Listing does not exist!");
     return res.redirect("/listings");
@@ -51,7 +58,7 @@ module.exports.renderEditForm=async (req, res) => {
   let originalImageUrl=list.image.url;
   let reducedImage = list.image.url.replace("/upload", "/upload/c_fill,w_400,h_400,g_auto");
   console.log(reducedImage);
-  res.render("listings/edit.ejs", { list,reducedImage });
+  res.render("listings/edit.ejs", { list,reducedImage,alltypes });
 }
 
 module.exports.editListing=async (req,res)=>{
@@ -62,15 +69,10 @@ module.exports.editListing=async (req,res)=>{
   list.price = req.body.listing.price;
   list.location = req.body.listing.location;
   list.country = req.body.listing.country;
-
-  console.log(list.country);
-
   let response= await geocodingClient.forwardGeocode({
   query: list.location,
   limit: 2
   }).send();
-  console.log(response.body.features[0].geometry)
-
   list.geometry=response.body.features[0].geometry;
 
   if(typeof req.file !== "undefined"){
